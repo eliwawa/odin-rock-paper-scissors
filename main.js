@@ -51,7 +51,7 @@ function playRound(playerSelection, computerSelection) {
 function game() {
     let playerScore = 0;
     let computerScore = 0;
-    while (playerScore < 3 && computerScore < 3) {
+    while (playerScore < 5 && computerScore < 5) {
         const playerSelection = prompt("Choose, rock, paper, or scissors");
         const roundOutcome = playRound(playerSelection, getComputerChoice());
         if (roundOutcome.substring(0, roundOutcome.indexOf('!')) == "You win") {
