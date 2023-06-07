@@ -1,4 +1,23 @@
-document.addEventListener('DOMContentLoaded', () => {
+const output = document.querySelector("#output");
+
+let playerScore = 0;
+let computerScore = 0;
+
+const startButton = document.querySelector('#start');
+startButton.addEventListener('click', () => {
+    playerScore = 0;
+    computerScore = 0;
+    output.textContent = 'Select a move'
+});
+
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+
+rock.addEventListener('click', () => playRound('rock', getComputerChoice()));
+paper.addEventListener('click', () => playRound('paper', getComputerChoice()));
+scissors.addEventListener('click', () => playRound('scissors', getComputerChoice()));
+
 function getComputerChoice() {
     let choice = Math.floor(Math.random()*3);
     switch(choice) {
@@ -15,64 +34,59 @@ function playRound(playerSelection, computerSelection) {
     playerSelection = playerSelection.toLowerCase();
     if (playerSelection == 'rock') {
         if (computerSelection == 'rock') {
-            return "It's a tie!";
+            reportScore('It\'s a tie!');
         }
         if (computerSelection == 'paper') {
-            return "You lose! Rock loses to paper.";
+            computerScore++;
+            reportScore('You lose! Rock loses to paper.');
         }
         if (computerSelection == 'scissors') {
-            return "You win! Rock beats scissors.";
+            playerScore++;
+            reportScore('You win! Rock beats scissors.');
         }
     } else if (playerSelection == 'paper') {
         if (computerSelection == 'paper') {
-            return "It's a tie!";
+            reportScore('It\'s a tie!');
         }
         if (computerSelection == 'scissors') {
-            return "You lose! Paper loses to scissors.";
+            computerScore++;
+            reportScore('You lose! Paper loses to scissors.');
         }
         if (computerSelection == 'rock') {
-            return "You win! Paper beats rock.";
+            playerScore++;
+            reportScore('You win! Paper beats rock.');
         }
     } else if (playerSelection == 'scissors') {
         if (computerSelection == 'scissors') {
-            return "It's a tie!";
+            reportScore('It\'s a tie!');
         }
         if (computerSelection == 'rock') {
-            return "You lose! Scissors loses to rock.";
+            computerScore++;
+            reportScore('You lose! Scissors loses to rock.');
         }
         if (computerSelection == 'paper') {
-            return "You win! Scissors beats paper.";
+            playerScore++;
+            reportScore('You win! Scissors beats paper.');
         }
-    } else {
-        return "Please enter either rock, paper, or scissors."
     }
 }
 
 function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-    while (playerScore < 5 && computerScore < 5) {
-        const playerSelection = prompt("Choose, rock, paper, or scissors");
-        const roundOutcome = playRound(playerSelection, getComputerChoice());
-        if (roundOutcome.substring(0, roundOutcome.indexOf('!')) == "You win") {
-            playerScore++;
-        } else if (roundOutcome.substring(0, roundOutcome.indexOf('!')) == "You lose") {
-            computerScore++;
-        }
-
-        if (playerScore > computerScore) {
-            alert(`${roundOutcome} The series score is ${playerScore} to ${computerScore} in your favor`);
-        } else if (playerScore < computerScore) {
-            alert(`${roundOutcome} The series score is ${computerScore} to ${playerScore} in the computer's favor`);
-        } else {
-            alert(`${roundOutcome} The series score is tied at ${playerScore} to ${computerScore}`);
-        }
-    }
-    if (playerScore > computerScore) {
-        alert("Congrats! You win the series!")
-    } else {
-        alert("The computer wins this series, better luck next time!")
+    if (playerScore > computerScore && playerScore > 4) {
+        output.innerHTML = output.textContent + "<br>" + 'Congrats! You win the series!';
+    } else if (computerScore > playerScore && computerScore > 4) {
+        output.innerHTML = output.textContent + "<br>" + 'The computer wins this series, better luck next time!';
     }
 }
 
-})
+function reportScore(roundOutcome) {
+    if (playerScore > computerScore) {
+        output.textContent = `${roundOutcome} The series score is ${playerScore} to ${computerScore} in your favor`;
+    } else if (playerScore < computerScore) {
+        output.textContent = `${roundOutcome} The series score is ${computerScore} to ${playerScore} in the computer's favor`;
+    } else {
+        output.textContent = `${roundOutcome} The series score is tied at ${playerScore} to ${computerScore}`;
+    }
+    game();
+    return
+}
